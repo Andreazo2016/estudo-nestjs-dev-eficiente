@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsEmail, MaxLength } from 'class-validator'
 import { BaseEntity } from 'src/author/entities/base.entity';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Book } from 'src/book/entities/book.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 interface CategoryParams {
     name: string
@@ -16,6 +17,9 @@ export class Category extends BaseEntity {
     name: string;
     @Column()
     created_at: Date = new Date()
+
+    @OneToMany(() => Book, (book) => book.category)
+    books: Book[]
 
     //proteção da borda interna
     //evitar que seja chamado indevidamente essa classe internamente

@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthorService {
+  
   @Inject('AUTHOR_REPOSITORY')
   private readonly authorRepository: Repository<Author>
   
@@ -16,8 +17,8 @@ export class AuthorService {
     return this.authorRepository.find({})
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} author`;
+  async findOne(id: number) {
+    return this.authorRepository.findOneBy({ id })
   }
 
   findByEmail(email:string): Promise<Author> {

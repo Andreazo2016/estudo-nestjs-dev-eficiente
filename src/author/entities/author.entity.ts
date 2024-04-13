@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsEmail, MaxLength } from 'class-validator'
 import { BaseEntity } from "./base.entity"
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Book } from 'src/book/entities/book.entity';
 
 
 interface AuthorParams {
@@ -26,6 +27,9 @@ export class Author extends BaseEntity {
     description: string;
     @Column()
     created_at: Date = new Date()
+
+    @OneToMany(() => Book, (book) => book.author)
+    books: Book[]
 
     //proteção da borda interna
     //evitar que seja chamado indevidamente essa classe internamente

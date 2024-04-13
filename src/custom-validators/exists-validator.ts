@@ -11,35 +11,36 @@ import { DataSource } from 'typeorm';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
-export class isAlreadyUsedConstraint implements ValidatorConstraintInterface {
+export class existsConstraint implements ValidatorConstraintInterface {
 
     @Inject('DATA_SOURCE')
     private readonly dataSource: DataSource
 
     validate(fieldValue: any, args: ValidationArguments) {
       const tableName = args.constraints[0]
+      const property = args.constraints[1] ?? args.property
       return this.dataSource.query(`
-        select ${args.property}
+        select ${property}
         from ${tableName}
-        where ${args.property} = '${fieldValue}'
+        where ${property} = '${fieldValue}'
         limit 1
       `).then(result => {
         const item = result[0]
-        if (item) return false
-        return true
+        if (item) return true
+        return false
       })
 
     }
   }
 
-  export function IsFieldAlreadyExists({ tableName }, validationOptions?: ValidationOptions) {
+  export function IsExists({ tableName, field }, validationOptions?: ValidationOptions) {
     return function (object: Object, propertyName: string) {
       registerDecorator({
         target: object.constructor,
         propertyName: propertyName,
         options: validationOptions,
-        constraints: [tableName],
-        validator: isAlreadyUsedConstraint,
+        constraints: [tableName, field],
+        validator: existsConstraint,
       });
     };
   }

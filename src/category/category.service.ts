@@ -5,18 +5,20 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
+
   @Inject('CATEGORY_REPOSITORY')
   private readonly categoryRepository: Repository<Category>
+  
   create(category: Category) {
     return this.categoryRepository.save(category)
   }
 
   findAll() {
-    return `This action returns all category`;
+    return this.categoryRepository.find({})
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: number) {
+    return this.categoryRepository.findOneBy({ id })
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {

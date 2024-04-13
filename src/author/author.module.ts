@@ -14,7 +14,8 @@ import { DatabaseModule } from 'src/database/database.module';
     useFactory: (dataSource: DataSource) => dataSource.getRepository(Author),
     inject: ['DATA_SOURCE'],
   },
-  AuthorService
-],
+    AuthorService
+  ],
+  exports: [AuthorService]
 })
 export class AuthorModule {}

@@ -16,5 +16,6 @@ import { DatabaseModule } from 'src/database/database.module';
     },
     CategoryService
   ],
+  exports: [CategoryService]
 })
 export class CategoryModule {}
