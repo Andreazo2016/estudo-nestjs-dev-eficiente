@@ -36,4 +36,8 @@ export class Country extends BaseEntity {
             this.validateFields(this)
         }
     }
+
+    hasStates() {
+        return this.states.length > 0
+    }
 }
