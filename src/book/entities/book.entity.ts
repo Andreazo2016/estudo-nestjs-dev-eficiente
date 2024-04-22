@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsEmail, MaxLength, IsDateString, MaxDate, IsPositive, Min, Length, MinDate } from 'class-validator'
+import { IsNotEmpty, IsPositive, Min, Length, MinDate } from 'class-validator'
 import { Author } from 'src/author/entities/author.entity';
 import { BaseEntity } from 'src/author/entities/base.entity';
 import { Category } from 'src/category/entities/category.entity';

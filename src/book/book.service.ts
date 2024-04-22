@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class BookService {
@@ -11,6 +11,14 @@ export class BookService {
 
   create(book: Book) {
     return this.bookRepository.save(book)
+  }
+
+  findAllByIds(booksId: number[]) {
+    return this.bookRepository.find({
+      where: {
+        id: In(booksId)
+      }
+    })
   }
 
   findAll() {

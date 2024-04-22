@@ -3,7 +3,7 @@ import { CreateDraftOrderRequest } from './dto/create-draft-order.dto';
 import { UpdateDraftOrderDto } from './dto/update-draft-order.dto';
 
 @Injectable()
-export class DraftOrderService {
+export class OrderService {
   create(createDraftOrderRequest: CreateDraftOrderRequest) {
     return createDraftOrderRequest;
   }

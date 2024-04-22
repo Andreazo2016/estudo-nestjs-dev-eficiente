@@ -7,7 +7,7 @@ import { BookModule } from './book/book.module';
 import { existsConstraint } from './custom-validators/exists-validator';
 import { CountryModule } from './country/country.module';
 import { StateModule } from './state/state.module';
-import { DraftOrderModule } from './draft_order/draft-order.module';
+import { OrderModule } from './order/order.module';
 import { cpfOrCnpjConstraint } from './custom-validators/cpf-or-cnpj-validator';
 
 @Module({
@@ -18,7 +18,7 @@ import { cpfOrCnpjConstraint } from './custom-validators/cpf-or-cnpj-validator';
     BookModule,
     CountryModule,
     StateModule,
-    DraftOrderModule
+    OrderModule
   ],
   controllers: [],
   providers: [

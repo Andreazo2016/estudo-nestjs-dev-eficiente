@@ -4,10 +4,9 @@ import { BookController } from './book.controller';
 import { DataSource } from 'typeorm';
 import { Book } from './entities/book.entity';
 import { DatabaseModule } from 'src/database/database.module';
-import { AuthorService } from 'src/author/author.service';
-import { CategoryService } from 'src/category/category.service';
 import { AuthorModule } from 'src/author/author.module';
 import { CategoryModule } from 'src/category/category.module';
+import { createBookRepository } from './book.repository';
 
 @Module({
   imports: [DatabaseModule, AuthorModule, CategoryModule],
@@ -15,11 +14,14 @@ import { CategoryModule } from 'src/category/category.module';
   providers: [
     {
       provide: 'BOOK_REPOSITORY',
-      useFactory: (dataSource: DataSource) => dataSource.getRepository(Book),
+      useFactory: (dataSource: DataSource) => createBookRepository(dataSource),
       inject: ['DATA_SOURCE'],
     },
     BookService,
   ],
+  exports:[
+    BookService,
+  ]
 })
 
 export class BookModule {}
