@@ -1,8 +1,9 @@
 import { IsNotEmpty } from 'class-validator'
+import { Address } from 'src/address/entities/address.entity';
 import { BaseEntity } from 'src/author/entities/base.entity';
 import { IsFieldAlreadyExists } from 'src/custom-validators/unique-field-validator';
 import { State } from 'src/state/entities/state.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
 
 
 interface CountryParams {
@@ -26,6 +27,9 @@ export class Country extends BaseEntity {
     @OneToMany(() => State, (state) => state.country)
     states: State[]
 
+    @OneToOne(() => Address)
+    address: Address
+
     //proteção da borda interna
     //evitar que seja chamado indevidamente essa classe internamente
     constructor(params: CountryParams) {
@@ -39,5 +43,12 @@ export class Country extends BaseEntity {
 
     hasStates() {
         return this.states.length > 0
+    }
+
+    addState(state: State) {
+        if (!state) {
+            throw new Error(`can not add a null state to country`)
+        }
+        this.states.push(state)
     }
 }

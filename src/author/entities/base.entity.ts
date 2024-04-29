@@ -1,6 +1,7 @@
 import { validateSync } from 'class-validator'
 
 export class BaseEntity {
+
     validateFields(classToValidateRef: any) {
        const errors = validateSync(classToValidateRef)
        if (errors.length > 0) {

@@ -18,7 +18,7 @@ export class StateService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} state`;
+    return this.stateRepository.findOneBy({ id })
   }
 
   update(id: number, updateStateDto: UpdateStateDto) {

@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { CreateDraftOrderRequest } from './dto/create-draft-order.dto';
+import { Inject, Injectable } from '@nestjs/common';
 import { UpdateDraftOrderDto } from './dto/update-draft-order.dto';
+import { Order } from './entities/order.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class OrderService {
-  create(createDraftOrderRequest: CreateDraftOrderRequest) {
-    return createDraftOrderRequest;
+
+  @Inject('ORDER_REPOSITORY')
+  private readonly orderRepository: Repository<Order>
+
+  create(order: Order) {
+    return this.orderRepository.save(order);
   }
 
   findAll() {
