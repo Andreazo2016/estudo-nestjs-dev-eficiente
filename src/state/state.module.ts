@@ -17,5 +17,6 @@ import { DatabaseModule } from 'src/database/database.module';
     },
     StateService
   ],
+  exports:[StateService]
 })
 export class StateModule {}

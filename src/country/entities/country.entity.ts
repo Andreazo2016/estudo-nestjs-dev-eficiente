@@ -7,7 +7,9 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typ
 
 
 interface CountryParams {
-    name: string
+    id?: number;
+    name: string,
+    state?: State;
 }
 
 @Entity({ name: 'country' })
@@ -24,19 +26,23 @@ export class Country extends BaseEntity {
     name: string;
 
 
-    @OneToMany(() => State, (state) => state.country)
+    @OneToMany(() => State, (state) => state.country, { cascade:true })
     states: State[]
 
-    @OneToOne(() => Address)
-    address: Address
+
+    @OneToOne(() => Address, a => a.country)
+    Address: Address
 
     //proteção da borda interna
     //evitar que seja chamado indevidamente essa classe internamente
     constructor(params: CountryParams) {
         super()
         if (params) {
-            const { name } = params
+            const { id, name, state } = params
+            this.id = id
             this.name = name
+            this.states = []
+            this.states.push(state)
             this.validateFields(this)
         }
     }

@@ -9,12 +9,23 @@ export class OrderService {
   @Inject('ORDER_REPOSITORY')
   private readonly orderRepository: Repository<Order>
 
-  create(order: Order) {
-    return this.orderRepository.save(order);
+  async create(order: Order) {
+    return this.orderRepository.save(order); 
   }
 
   findAll() {
-    return `This action returns all draftOrder`;
+    return this.orderRepository.find({
+      relations: {
+        items: true,
+        user: {
+          addresses: {
+            country: {
+              states: true
+            }
+          }
+        }
+      }
+    })
   }
 
   findOne(id: number) {

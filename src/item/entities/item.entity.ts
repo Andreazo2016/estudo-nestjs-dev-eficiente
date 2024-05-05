@@ -30,7 +30,7 @@ export class Item extends BaseEntity {
     @Column()
     created_at: Date = new Date()
 
-    @ManyToOne(() => Order)
+    @ManyToOne(() => Order, o => o.items)
     @JoinColumn({ name: "order_id" })
     order: Order
 

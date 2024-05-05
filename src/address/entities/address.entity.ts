@@ -9,6 +9,7 @@ interface AddressParams {
     complement: string;
     zip_code: string;
     country: Country;
+    user: User;
 }
 
 @Entity({ name: 'address' })
@@ -34,12 +35,12 @@ export class Address extends BaseEntity {
 
 
     @IsNotEmpty()
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, (user) => user.addresses)
     @JoinColumn({ name: "user_id" }) // anotação quem vai sempre na classe ao qual vai recerb a coluna estrangeira
     user: User;
 
-    @OneToOne(() => Country)
-    @JoinColumn({ name: "country_id" })
+    @OneToOne(() => Country, c => c.Address, { createForeignKeyConstraints: false })
+    @JoinColumn({ name: 'country_id' , referencedColumnName: 'id' })
     country: Country
     
 
@@ -48,12 +49,14 @@ export class Address extends BaseEntity {
     constructor(params: AddressParams) {
         super()
         if (params) {
-            const { street, complement, zip_code, country } = params
+            const { street, complement, zip_code, country, user } = params
             this.street = street
             this.complement = complement
             this.zip_code = zip_code
             this.created_at = new Date()
             this.country = country
+            this.user = user
+            this.user.addAddress(this)
             this.validateFields(this)
         }   
     }

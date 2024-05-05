@@ -10,6 +10,8 @@ import { Address } from 'src/address/entities/address.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Order } from './entities/order.entity';
 import { Item } from 'src/item/entities/item.entity';
+import { Country } from 'src/country/entities/country.entity';
+import { State } from 'src/state/entities/state.entity';
 
 @Controller('order')
 export class OrderController {
@@ -30,42 +32,41 @@ export class OrderController {
         message: 'Invalid total cart price'
       })
     }
-    const [country, state] = await Promise.all([
-      this.countryService.findOne(createDraftOrderRequest.country_id),
-      this.stateService.findOne(createDraftOrderRequest.state_id)
-    ])
-    country.addState(state)
-    const address = new Address({
-      complement: createDraftOrderRequest.complement,
-      country,
-      street: createDraftOrderRequest.street,
-      zip_code: createDraftOrderRequest.zip_code
-    })
-    const user = new User({
-      name: createDraftOrderRequest.name,
-      last_name: createDraftOrderRequest.lastname,
-      document: createDraftOrderRequest.document,
-      email: createDraftOrderRequest.email,
-      phone: createDraftOrderRequest.phone
-    })
-    address.addUser(user)
-    user.addAddress(address)
-
-    const items: Item[] = books.map(book => {
-      const draftItem = createDraftOrderRequest.cart.itens.find(item => item.book_id === book.id)
-      return new Item({
-        name: book.title,
-        price: book.price,
-        quantity: draftItem.quantity,
+    const country: Country = await this.countryService.findOne(createDraftOrderRequest.country_id)
+      const state: State = await this.stateService.findOne(createDraftOrderRequest.state_id)
+      const c = new Country({ id: country.id, name: country.name, state })
+      const user = new User({
+        name: createDraftOrderRequest.name,
+        last_name: createDraftOrderRequest.lastname,
+        document: createDraftOrderRequest.document,
+        email: createDraftOrderRequest.email,
+        phone: createDraftOrderRequest.phone
       })
-    })
 
-    const order = new Order({
-      user,
-      items
-    })
-     
-    return this.orderService.create(order);
+      const address = new Address({
+        complement: createDraftOrderRequest.complement,
+        country: c,
+        street: createDraftOrderRequest.street,
+        zip_code: createDraftOrderRequest.zip_code,
+        user
+      })
+  
+      const items: Item[] = books.map(book => {
+        const draftItem = createDraftOrderRequest.cart.itens.find(item => item.book_id === book.id)
+        return new Item({
+          name: book.title,
+          price: book.price,
+          quantity: draftItem.quantity,
+        })
+      })
+      const order = new Order({
+        user,
+        items
+      })
+      const orderSaved = await this.orderService.create(order);
+      return response.status(HttpStatus.CREATED).send({
+        id: orderSaved.id
+      })
   }
 
   @Get()

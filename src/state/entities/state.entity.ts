@@ -24,7 +24,7 @@ export class State extends BaseEntity {
 
 
     @IsNotEmpty()
-    @ManyToOne(() => Country)
+    @ManyToOne(() => Country, c => c.states)
     @JoinColumn({ name: "country_id" }) // anotação quem vai sempre na classe ao qual vai recerb a coluna estrangeira
     country: Country;
 

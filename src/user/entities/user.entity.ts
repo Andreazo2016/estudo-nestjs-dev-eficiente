@@ -41,7 +41,7 @@ export class User extends BaseEntity {
     @Column()
     created_at: Date = new Date()
 
-    @OneToMany(() => Address, (address) => address.user)
+    @OneToMany(() => Address, (address) => address.user, { cascade: true })
     addresses: Address[]
 
     @OneToMany(() => Order, (order) => order.user)
@@ -59,6 +59,8 @@ export class User extends BaseEntity {
             this.document = document
             this.last_name = last_name
             this.created_at = new Date()
+            this.addresses = []
+            this.orders = []
             this.validateFields(this)
         }
     }
@@ -67,7 +69,6 @@ export class User extends BaseEntity {
         if (!address) {
             throw new Error('can not be null a address')
         }
-
         this.addresses.push(address)
     }
 

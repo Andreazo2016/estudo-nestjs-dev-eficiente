@@ -1,10 +1,9 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsEmail, MaxLength, ArrayNotEmpty, ValidateNested } from 'class-validator'
 import { BaseEntity } from 'src/author/entities/base.entity';
-import { Book } from 'src/book/entities/book.entity';
 import { Item } from 'src/item/entities/item.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne } from 'typeorm';
 
 interface OrderParams {
     user: User;
@@ -23,13 +22,13 @@ export class Order extends BaseEntity {
     @ArrayNotEmpty()
     @ValidateNested({ each: true })
     @Type(() => Item)
-    @OneToMany(() => Item, (item) => item.order)
+    @OneToMany(() => Item, (item) => item.order, { cascade: true })
     items: Item[]
 
     @ArrayNotEmpty()
     @ValidateNested({ each: true })
     @Type(() => User)
-    @OneToMany(() => User, (user) => user.orders)
+    @ManyToOne(() => User, (user) => user.orders, { cascade: true })
     @JoinColumn({ name: "user_id" })
     user: User
 

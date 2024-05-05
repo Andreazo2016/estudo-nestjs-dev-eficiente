@@ -6,12 +6,14 @@ import { StateModule } from 'src/state/state.module';
 import { CountryModule } from 'src/country/country.module';
 import { DataSource } from 'typeorm';
 import { Order } from './entities/order.entity';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports:[
     BookModule,
     CountryModule,
-    StateModule
+    StateModule,
+    DatabaseModule
   ],
   controllers: [OrderController],
   providers: [

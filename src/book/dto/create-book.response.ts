@@ -8,9 +8,11 @@ export class CreateBookResponse {
 
     id: number;
     title: string;
+    price: number;
 
     constructor(book: Book) {
         this.id = book.id
-        this.title = book.title
+        this.title = book.title,
+        this.price = book.price
     }
 }
